@@ -74,7 +74,7 @@ body {
 
     .menu a.active,
     .menu a:hover {
-        background: linear-gradient(90deg, #4169ff, #6657ff);
+        background: linear-gradient(90deg, #b8860b, #7a5807);
     }
 
 .sidebar-card {
