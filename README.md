@@ -209,7 +209,50 @@ Modal Forms
 Real-Time Notifications
 Responsive UI
 📸 Screenshot
-<img width="1536" height="1024" alt="Dashboard" src="https://github.com/user-attachments/assets/3ecc39d8-3224-4cfb-99a8-9e44123bcf6a" />
+### 📊 Dashboard
+![Dashboard](screenshots/Dashboard_1.PNG)
+
+![Dashboard](screenshots/Dashboard_2.PNG)
+
+---
+
+### 👤 Customer Module
+![Customer Module](screenshots/Customer_module.PNG)
+
+---
+
+### 🏦 Account Module
+![Account Module](screenshots/Account.PNG)
+
+---
+
+### 💳 Card Module
+![Card Module](screenshots/Card_module.PNG)
+
+---
+
+### 💸 Transactions
+![Transactions](screenshots/Transactions.PNG)
+
+---
+
+### 🔄 Fund Transfer
+![Fund Transfer](screenshots/Transfer.PNG)
+
+---
+
+### 🏠 Loan Module
+![Loan Module](screenshots/Loan_module.PNG)
+
+---
+
+### 📈 Reports
+![Reports](screenshots/Report_module.PNG)
+
+---
+
+### ⚙️ Settings
+![Settings](screenshots/Settings.PNG)
 ⚙️ Setup Instructions
 git clone https://github.com/Bekele-Ayalew/Core-Banking-Demo.git
 cd Core-Banking-Demo
