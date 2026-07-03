@@ -1,0 +1,101 @@
+﻿@model OOPBank.ViewModels.FrontendView
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Reports</h1>
+        <p>Generate financial, customer, transaction and account performance reports.</p>
+    </div>
+
+    <button class="primary-btn">
+        <i class="bi bi-download"></i> Export Report
+    </button>
+</div>
+
+<div class="report-grid">
+    <div class="report-card">
+        <span class="mini-icon blue"><i class="bi bi-graph-up-arrow"></i></span>
+        <h3>Total Balance</h3>
+        <h2>ETB @Model.TotalBalance.ToString("N2")</h2>
+        <p>Overall balance available across all active bank accounts.</p>
+        <button>Financial Summary</button>
+    </div>
+
+    <div class="report-card">
+        <span class="mini-icon green"><i class="bi bi-people"></i></span>
+        <h3>Total Customers</h3>
+        <h2>@Model.TotalCustomers</h2>
+        <p>Total registered customers in the BitBloom Bank Management System.</p>
+        <button>Customer Report</button>
+    </div>
+
+    <div class="report-card">
+        <span class="mini-icon orange"><i class="bi bi-arrow-left-right"></i></span>
+        <h3>Total Transactions</h3>
+        <h2>@Model.TotalTransactions</h2>
+        <p>All deposits, withdrawals, transfer in and transfer out records.</p>
+        <button>Transaction Report</button>
+    </div>
+
+    <div class="report-card">
+        <span class="mini-icon purple"><i class="bi bi-wallet2"></i></span>
+        <h3>Total Accounts</h3>
+        <h2>@Model.TotalAccounts</h2>
+        <p>Total savings and current accounts created for bank customers.</p>
+        <button>Account Report</button>
+    </div>
+</div>
+
+<div class="panel-card mt-page">
+    <div class="section-title">
+        <h3>Recent Transactions Report</h3>
+        <button>View All</button>
+    </div>
+
+    <table class="pro-table">
+        <thead>
+            <tr>
+                <th>Transaction Type</th>
+                <th>Customer</th>
+                <th>Account</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.RecentTransactions != null && Model.RecentTransactions.Any())
+            {
+                foreach (var item in Model.RecentTransactions)
+                {
+                    var isCredit =
+                    item.TransactionType == "Deposit" ||
+                    item.TransactionType == "Interest" ||
+                    item.TransactionType == "Transfer In";
+
+                    var amountClass = isCredit ? "plus" : "minus";
+                    var amountSign = isCredit ? "+" : "-";
+
+                    <tr>
+                        <td>@item.TransactionType</td>
+                        <td>@item.Account?.Customer?.FirstName @item.Account?.Customer?.LastName</td>
+                        <td>@item.Account?.AccountNumber</td>
+                        <td class="@amountClass">@amountSign$@item.Amount.ToString("N2")</td>
+                        <td>@item.TransactionDate?.ToString("MMM dd, yyyy")</td>
+                        <td>@item.Description</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="empty-row">No report data found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

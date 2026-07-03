@@ -1,0 +1,246 @@
+﻿@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="page-header">
+    <div>
+        <h1>System Settings</h1>
+        <p>Configure bank profile, security options and transaction policies.</p>
+    </div>
+
+    <button class="primary-btn" disabled>
+        <i class="bi bi-check-circle"></i>
+        Demo Settings
+    </button>
+</div>
+
+<div class="page-grid two-col">
+
+    <div class="panel-card">
+
+        <h3 class="card-title">
+            Bank Information
+        </h3>
+
+        <div class="settings-form">
+
+            <div>
+                <label>Bank Name</label>
+                <input class="form-control"
+                       value="BitBloom Bank"
+                       readonly />
+            </div>
+
+            <div>
+                <label>Support Email</label>
+                <input class="form-control"
+                       value="support@bitbloombank.com"
+                       readonly />
+            </div>
+
+            <div>
+                <label>Support Phone</label>
+                <input class="form-control"
+                       value="+2519******23"
+                       readonly />
+            </div>
+
+            <div>
+                <label>Default Currency</label>
+
+                <input class="form-control"
+                       value="ETB"
+                       readonly />
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel-card">
+
+        <h3 class="card-title">
+
+            Security Settings
+
+        </h3>
+
+        <div class="setting-list">
+
+            <div>
+
+                <span>Two Factor Authentication</span>
+
+                <label class="switch">
+
+                    <input type="checkbox"
+                           checked
+                            />
+
+                    <b></b>
+
+                </label>
+
+            </div>
+
+            <div>
+
+                <span>Email Notifications</span>
+
+                <label class="switch">
+
+                    <input type="checkbox"
+                           checked
+                            />
+
+                    <b></b>
+
+                </label>
+
+            </div>
+
+            <div>
+
+                <span>SMS Alerts</span>
+
+                <label class="switch">
+
+                    <input type="checkbox"
+                            />
+
+                    <b></b>
+
+                </label>
+
+            </div>
+
+            <div>
+
+                <span>Auto Logout</span>
+
+                <label class="switch">
+
+                    <input type="checkbox"
+                           checked
+                            />
+
+                    <b></b>
+
+                </label>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="panel-card mt-page">
+
+    <h3 class="card-title">
+
+        Transaction Rules
+
+    </h3>
+
+    <div class="settings-form three">
+
+        <div>
+
+            <label>Daily Transfer Limit</label>
+
+            <input class="form-control"
+                   value="ETB 50,000"
+                   readonly />
+
+        </div>
+
+        <div>
+
+            <label>Minimum Balance</label>
+
+            <input class="form-control"
+                   value="ETB 1,000"
+                   readonly />
+
+        </div>
+
+        <div>
+
+            <label>Withdrawal Fee</label>
+
+            <input class="form-control"
+                   value="2.5%"
+                   readonly />
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="panel-card mt-page">
+
+    <h3 class="card-title">
+        About Project
+    </h3>
+
+    <table class="pro-table">
+
+        <tbody>
+
+            <tr>
+
+                <td>Project</td>
+
+                <td>BitBloom Bank Management System</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Framework</td>
+
+                <td>ASP.NET Core MVC (.NET 8)</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Database</td>
+
+                <td>SQL Server</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Architecture</td>
+
+                <td>MVC + Service Layer + Entity Framework Core</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Programming Language</td>
+
+                <td>C#</td>
+
+            </tr>
+
+            <tr>
+
+                <td>OOP Concepts</td>
+
+                <td>Encapsulation • Abstraction • Inheritance • Polymorphism</td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>

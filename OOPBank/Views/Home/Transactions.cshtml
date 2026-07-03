@@ -1,0 +1,59 @@
+﻿@model IEnumerable<OOPBank.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Transactions</h1>
+        <p>Track deposits, withdrawals, transfers and interest.</p>
+    </div>
+</div>
+
+<div class="card full-card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Account</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    var isCredit =
+                    item.TransactionType == "Deposit" ||
+                    item.TransactionType == "Interest" ||
+                    item.TransactionType == "Transfer In";
+
+                    var amountClass = isCredit ? "plus" : "minus";
+                    var amountSign = isCredit ? "+" : "-";
+
+                    <tr>
+                        <td>@item.TransactionType</td>
+                        <td>@item.Account?.AccountNumber</td>
+                        <td>@item.Account?.Customer?.FirstName @item.Account?.Customer?.LastName</td>
+                        <td class="@amountClass">
+                            @amountSign ETB @item.Amount.ToString("N2")
+                        </td>
+                        <td>@item.TransactionDate?.ToString("MMM dd, yyyy")</td>
+                        <td>@item.Description</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="empty-row">No transactions found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

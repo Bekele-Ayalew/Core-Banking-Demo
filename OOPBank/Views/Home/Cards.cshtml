@@ -1,0 +1,176 @@
+﻿@model IEnumerable<OOPBank.Models.Card>
+
+@{
+    ViewData["Title"] = "Cards";
+
+    var customers = ViewBag.Customers as List<OOPBank.Models.Customer> ?? new List<OOPBank.Models.Customer>();
+    var cards = Model?.ToList() ?? new List<OOPBank.Models.Card>();
+
+    var totalCards = cards.Count;
+    var activeCards = cards.Count(x => x.CardStatus == "Active");
+    var blockedCards = cards.Count(x => x.CardStatus == "Blocked");
+    var pendingCards = cards.Count(x => x.CardStatus == "Pending");
+}
+
+<div class="page-header">
+    <div>
+        <h1>Cards</h1>
+        <p>Manage debit cards, credit cards, activation and blocked cards.</p>
+    </div>
+
+    <button class="primary-btn" type="button" onclick="openModal('cardModal')">
+        <i class="bi bi-credit-card"></i> Issue Card
+    </button>
+</div>
+
+<div class="page-stats-grid">
+    <div class="mini-stat-card">
+        <span class="mini-icon blue"><i class="bi bi-credit-card"></i></span>
+        <div>
+            <p>Total Cards</p>
+            <h3>@totalCards</h3>
+        </div>
+    </div>
+
+    <div class="mini-stat-card">
+        <span class="mini-icon green"><i class="bi bi-check-circle"></i></span>
+        <div>
+            <p>Active Cards</p>
+            <h3>@activeCards</h3>
+        </div>
+    </div>
+
+    <div class="mini-stat-card">
+        <span class="mini-icon red"><i class="bi bi-x-circle"></i></span>
+        <div>
+            <p>Blocked Cards</p>
+            <h3>@blockedCards</h3>
+        </div>
+    </div>
+
+    <div class="mini-stat-card">
+        <span class="mini-icon orange"><i class="bi bi-hourglass-split"></i></span>
+        <div>
+            <p>Pending Cards</p>
+            <h3>@pendingCards</h3>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card">
+    <div class="section-title">
+        <h3>Issued Cards</h3>
+    </div>
+
+    <table class="pro-table">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Card Number</th>
+                <th>Card Type</th>
+                <th>Status</th>
+                <th>Expiry</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (cards.Any())
+            {
+                foreach (var item in cards)
+                {
+                    var statusClass = item.CardStatus?.ToLower() switch
+                    {
+                        "active" => "approved",
+                        "blocked" => "rejected",
+                        _ => "pending"
+                    };
+
+                    <tr>
+                        <td>@item.Customer?.FirstName @item.Customer?.LastName</td>
+                        <td>@item.CardNumber</td>
+                        <td>@item.CardType</td>
+                        <td>
+                            <span class="status @statusClass">
+                                @item.CardStatus
+                            </span>
+                        </td>
+                        <td>@item.ExpiryDate?.ToString("MM/yyyy")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="empty-row">No cards found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal-overlay" id="cardModal">
+    <div class="custom-modal">
+        <div class="modal-header-box">
+            <div>
+                <h2>Issue New Card</h2>
+                <p>Create a new Debit or Credit Card.</p>
+            </div>
+
+            <button type="button" class="close-btn" onclick="closeModal('cardModal')">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <form asp-controller="Home" asp-action="AddCard" method="post">
+            <div class="modal-form-grid">
+                <div>
+                    <label>Customer</label>
+                    <select name="CustomerId" class="form-control" required>
+                        <option value="">Select Customer</option>
+
+                        @foreach (var customer in customers)
+                        {
+                            <option value="@customer.CustomerId">
+                                @customer.FirstName @customer.LastName
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div>
+                    <label>Card Type</label>
+                    <select name="CardType" class="form-control" required>
+                        <option value="">Select Card Type</option>
+                        <option value="Debit Card">Debit Card</option>
+                        <option value="Credit Card">Credit Card</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Card Number</label>
+                    <input class="form-control" name="CardNumber" placeholder="4589 4589 4589 4589" required />
+                </div>
+
+                <div>
+                    <label>Expiry Date</label>
+                    <input type="date" class="form-control" name="ExpiryDate" required />
+                </div>
+
+                <div>
+                    <label>CVV</label>
+                    <input class="form-control" name="Cvv" maxlength="5" required />
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="cancel-btn" onclick="closeModal('cardModal')">
+                    Cancel
+                </button>
+
+                <button type="submit" class="primary-btn">
+                    Save Card
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

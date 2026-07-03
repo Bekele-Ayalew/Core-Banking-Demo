@@ -1,0 +1,205 @@
+﻿@model OOPBank.ViewModels.FrontendView
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var today = DateTime.Now.ToString("MMM dd, yyyy | dddd");
+}
+
+<div class="welcome-row">
+    <div>
+        <h3>Welcome back, Admin!</h3>
+        <p>Here's what's happening with your bank today.</p>
+    </div>
+
+    <div class="date-box">
+        <i class="bi bi-calendar3"></i>
+        @today
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card purple">
+        <div class="stat-icon"><i class="bi bi-people"></i></div>
+        <div>
+            <p>Total Customers</p>
+            <h3>@Model.TotalCustomers</h3>
+            <small>Live database count</small>
+        </div>
+    </div>
+
+    <div class="stat-card blue">
+        <div class="stat-icon"><i class="bi bi-wallet2"></i></div>
+        <div>
+            <p>Total Accounts</p>
+            <h3>@Model.TotalAccounts</h3>
+            <small>Savings and Current accounts</small>
+        </div>
+    </div>
+
+    <div class="stat-card green">
+        <div class="stat-icon">
+            <i class="bi bi-cash"></i>
+        </div>
+        <div>
+            <p>Total Balance</p>
+            <h3>ETB @Model.TotalBalance.ToString("N2")</h3>
+            <small>Across all accounts</small>
+        </div>
+    </div>
+
+    <div class="stat-card orange">
+        <div class="stat-icon"><i class="bi bi-safe2"></i></div>
+        <div>
+            <p>Total Transactions</p>
+            <h3>@Model.TotalTransactions</h3>
+            <small>Deposit, withdraw and transfer</small>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card chart-card">
+        <div class="card-header">
+            <h3>Transaction Overview</h3>
+            <button>This Month <i class="bi bi-chevron-down"></i></button>
+        </div>
+
+        <div class="legend">
+            <span><b class="deposit"></b> Credit</span>
+            <span><b class="withdraw"></b> Debit</span>
+        </div>
+
+        <div class="fake-chart">
+            <div class="grid-line"></div>
+            <div class="grid-line"></div>
+            <div class="grid-line"></div>
+            <div class="chart-line blue-line"></div>
+            <div class="chart-line red-line"></div>
+        </div>
+    </div>
+
+    <div class="card transactions">
+        <div class="card-header">
+            <h3>Recent Transactions</h3>
+            <a asp-controller="Home" asp-action="Transactions" class="small-link">View All</a>
+        </div>
+
+        @if (Model.RecentTransactions != null && Model.RecentTransactions.Any())
+        {
+            foreach (var item in Model.RecentTransactions)
+            {
+                var isCredit =
+                item.TransactionType == "Deposit" ||
+                item.TransactionType == "Interest" ||
+                item.TransactionType == "Transfer In";
+
+                var amountClass = isCredit ? "plus" : "minus";
+                var amountSign = isCredit ? "+" : "-";
+                var circleClass = isCredit ? "green" : "red";
+                var iconClass = isCredit ? "bi-arrow-down" : "bi-arrow-up";
+
+                <div class="txn">
+                    <span class="circle @circleClass">
+                        <i class="bi @iconClass"></i>
+                    </span>
+
+                    <div>
+                        <h4>@item.TransactionType</h4>
+                        <p>Account: @item.Account?.AccountNumber</p>
+                    </div>
+
+                    <strong class="@amountClass">
+                        @amountSign ETB @item.Amount.ToString("N2")
+                    </strong>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="empty-row">No recent transactions.</p>
+        }
+    </div>
+
+    <div class="secure-card">
+        <h2>Secure Banking<br />For Your Future</h2>
+        <p>We protect your money with top-notch security</p>
+        <i class="bi bi-bank2"></i>
+        <button>Learn More</button>
+    </div>
+</div>
+
+<div class="bottom-grid">
+    <div class="card">
+        <h3>System Summary</h3>
+
+        <div class="overview-list">
+            <div>
+                <span>Total Loans</span>
+                <b>@Model.TotalLoans</b>
+            </div>
+
+            <div>
+                <span>Total Cards</span>
+                <b>@Model.TotalCards</b>
+            </div>
+
+            <div>
+                <span>Total Transactions</span>
+                <b>@Model.TotalTransactions</b>
+            </div>
+        </div>
+    </div>
+
+    <div class="card balances">
+        <div class="card-header">
+            <h3>Top 5 Account Balances</h3>
+            <a asp-controller="Home" asp-action="Accounts" class="small-link">View All</a>
+        </div>
+
+        @if (Model.TopAccounts != null && Model.TopAccounts.Any())
+        {
+            var count = 1;
+
+            foreach (var account in Model.TopAccounts)
+            {
+                <p>
+                    @count. @account.Customer?.FirstName @account.Customer?.LastName
+                    <b>ETB @account.Balance?.ToString("N2")</b>
+                </p>
+
+                count++;
+            }
+        }
+        else
+        {
+            <p class="empty-row">No accounts found.</p>
+        }
+    </div>
+
+    <div class="card quick">
+        <h3>Quick Actions</h3>
+
+        <div class="quick-grid">
+            <a asp-controller="Home" asp-action="Customers">
+                <i class="bi bi-person-plus"></i>
+                Add Customer
+            </a>
+
+            <a asp-controller="Home" asp-action="Accounts">
+                <i class="bi bi-credit-card"></i>
+                Create Account
+            </a>
+
+            <a asp-controller="Home" asp-action="Transfers">
+                <i class="bi bi-arrow-left-right"></i>
+                Fund Transfer
+            </a>
+
+            <a asp-controller="Home" asp-action="Reports">
+                <i class="bi bi-file-earmark-text"></i>
+                Generate Report
+            </a>
+        </div>
+    </div>
+</div>

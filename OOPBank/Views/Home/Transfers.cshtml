@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Transfers";
+    var accounts = ViewBag.Accounts as List<OOPBank.Models.Account>;
+}
+
+<div class="page-header">
+    <div>
+        <h1>Fund Transfer</h1>
+        <p>Transfer money from one account to another account.</p>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert-success">@TempData["Success"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert-error">@TempData["Error"]</div>
+}
+
+<div class="card form-card full-card">
+    <form asp-controller="Home" asp-action="TransferMoney" method="post">
+        <div class="form-grid">
+            <div>
+                <label>From Account</label>
+                <select class="form-control" name="fromAccountId" required>
+                    <option value="">Select From Account</option>
+                    @if (accounts != null)
+                    {
+                        foreach (var account in accounts)
+                        {
+                            <option value="@account.AccountId">
+                                @account.AccountNumber - @account.Customer?.FirstName @account.Customer?.LastName - $@account.Balance?.ToString("N2")
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label>To Account</label>
+                <select class="form-control" name="toAccountId" required>
+                    <option value="">Select To Account</option>
+                    @if (accounts != null)
+                    {
+                        foreach (var account in accounts)
+                        {
+                            <option value="@account.AccountId">
+                                @account.AccountNumber - @account.Customer?.FirstName @account.Customer?.LastName
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label>Amount</label>
+                <input class="form-control" name="amount" type="number" step="0.01" min="1" placeholder="5000" required />
+            </div>
+
+            <div>
+                <label>Note</label>
+                <input class="form-control" name="note" placeholder="Transfer note" />
+            </div>
+        </div>
+
+        <button type="submit" class="primary-btn mt-3">
+            <i class="bi bi-arrow-left-right"></i> Transfer Now
+        </button>
+    </form>
+</div>

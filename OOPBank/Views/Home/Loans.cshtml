@@ -1,0 +1,251 @@
+﻿@model IEnumerable<OOPBank.Models.Loan>
+
+@{
+    ViewData["Title"] = "Loans";
+
+    var customers = ViewBag.Customers as List<OOPBank.Models.Customer>;
+    var loans = Model?.ToList() ?? new List<OOPBank.Models.Loan>();
+
+    var totalLoans = loans.Count;
+    var approvedLoans = loans.Count(x => x.LoanStatus == "Approved" || x.LoanStatus == "Active");
+    var pendingLoans = loans.Count(x => x.LoanStatus == "Pending");
+    var rejectedLoans = loans.Count(x => x.LoanStatus == "Rejected");
+
+    decimal GetPercent(int count)
+    {
+        if (totalLoans == 0) return 0;
+        return Math.Round((decimal)count / totalLoans * 100, 0);
+    }
+
+    string GetStatusClass(string? status)
+    {
+        return status?.ToLower() switch
+        {
+            "approved" => "approved",
+            "active" => "approved",
+            "rejected" => "rejected",
+            _ => "pending"
+        };
+    }
+}
+
+<div class="page-header">
+    <div>
+        <h1>Loan Management</h1>
+        <p>Review loan applications, approvals, repayment status and active loan accounts.</p>
+    </div>
+
+    <button class="primary-btn" type="button" onclick="openModal('loanModal')">
+        <i class="bi bi-plus-lg"></i> New Loan
+    </button>
+</div>
+
+<div class="page-stats-grid">
+    <div class="mini-stat-card">
+        <span class="mini-icon orange"><i class="bi bi-cash-stack"></i></span>
+        <div>
+            <p>Total Loans</p>
+            <h3>@totalLoans</h3>
+        </div>
+    </div>
+
+    <div class="mini-stat-card">
+        <span class="mini-icon green"><i class="bi bi-check-circle"></i></span>
+        <div>
+            <p>Approved / Active</p>
+            <h3>@approvedLoans</h3>
+        </div>
+    </div>
+
+    <div class="mini-stat-card">
+        <span class="mini-icon blue"><i class="bi bi-hourglass-split"></i></span>
+        <div>
+            <p>Pending</p>
+            <h3>@pendingLoans</h3>
+        </div>
+    </div>
+
+    <div class="mini-stat-card">
+        <span class="mini-icon red"><i class="bi bi-x-circle"></i></span>
+        <div>
+            <p>Rejected</p>
+            <h3>@rejectedLoans</h3>
+        </div>
+    </div>
+</div>
+
+<div class="page-grid two-col">
+    <div class="panel-card">
+        <div class="section-title">
+            <h3>Recent Loan Applications</h3>
+            <button type="button">View All</button>
+        </div>
+
+        <table class="pro-table">
+            <thead>
+                <tr>
+                    <th>Applicant</th>
+                    <th>Loan Type</th>
+                    <th>Amount</th>
+                    <th>Installment</th>
+                    <th>Status</th>
+                    <th>Applied Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (loans.Any())
+                {
+                    foreach (var item in loans)
+                    {
+                        var statusClass = GetStatusClass(item.LoanStatus);
+
+                        <tr>
+                            <td>@item.Customer?.FirstName @item.Customer?.LastName</td>
+                            <td>@item.LoanType</td>
+                            <td>$@item.LoanAmount?.ToString("N2")</td>
+                            <td>$@item.MonthlyInstallment?.ToString("N2")</td>
+                            <td>
+                                <span class="status @statusClass">
+                                    @item.LoanStatus
+                                </span>
+                            </td>
+                            <td>@item.CreatedDate?.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="empty-row">No loan applications found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel-card">
+        <h3 class="card-title">Loan Categories</h3>
+
+        @{
+            var personal = loans.Count(x => x.LoanType == "Personal Loan");
+            var business = loans.Count(x => x.LoanType == "Business Loan");
+            var car = loans.Count(x => x.LoanType == "Car Loan");
+            var home = loans.Count(x => x.LoanType == "Home Loan");
+
+            var personalPercent = GetPercent(personal);
+            var businessPercent = GetPercent(business);
+            var carPercent = GetPercent(car);
+            var homePercent = GetPercent(home);
+        }
+
+        <div class="progress-list">
+            <div>
+                <div class="progress-head">
+                    <span>Personal Loans</span>
+                    <b>@personalPercent%</b>
+                </div>
+                <div class="progress-track">
+                    <span style="width:@personalPercent%"></span>
+                </div>
+            </div>
+
+            <div>
+                <div class="progress-head">
+                    <span>Business Loans</span>
+                    <b>@businessPercent%</b>
+                </div>
+                <div class="progress-track">
+                    <span style="width:@businessPercent%"></span>
+                </div>
+            </div>
+
+            <div>
+                <div class="progress-head">
+                    <span>Car Loans</span>
+                    <b>@carPercent%</b>
+                </div>
+                <div class="progress-track">
+                    <span style="width:@carPercent%"></span>
+                </div>
+            </div>
+
+            <div>
+                <div class="progress-head">
+                    <span>Home Loans</span>
+                    <b>@homePercent%</b>
+                </div>
+                <div class="progress-track">
+                    <span style="width:@homePercent%"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="loanModal">
+    <div class="custom-modal">
+        <div class="modal-header-box">
+            <div>
+                <h2>New Loan Application</h2>
+                <p>Add customer loan request and installment details.</p>
+            </div>
+
+            <button type="button" class="close-btn" onclick="closeModal('loanModal')">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <form asp-controller="Home" asp-action="AddLoan" method="post">
+            <div class="modal-form-grid">
+                <div>
+                    <label>Customer</label>
+                    <select name="CustomerId" class="form-control" required>
+                        <option value="">Select Customer</option>
+
+                        @if (customers != null && customers.Any())
+                        {
+                            foreach (var customer in customers)
+                            {
+                                <option value="@customer.CustomerId">
+                                    @customer.FirstName @customer.LastName - @customer.Cnic
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div>
+                    <label>Loan Type</label>
+                    <select name="LoanType" class="form-control" required>
+                        <option value="">Select Loan Type</option>
+                        <option value="Personal Loan">Personal Loan</option>
+                        <option value="Business Loan">Business Loan</option>
+                        <option value="Car Loan">Car Loan</option>
+                        <option value="Home Loan">Home Loan</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Loan Amount</label>
+                    <input name="LoanAmount" type="number" step="0.01" min="1" class="form-control" required />
+                </div>
+
+                <div>
+                    <label>Interest Rate %</label>
+                    <input name="InterestRate" type="number" step="0.01" min="0" class="form-control" value="5" required />
+                </div>
+
+                <div>
+                    <label>Loan Term Months</label>
+                    <input name="LoanTerm" type="number" min="1" class="form-control" value="12" required />
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="cancel-btn" onclick="closeModal('loanModal')">Cancel</button>
+                <button type="submit" class="primary-btn">Save Loan</button>
+            </div>
+        </form>
+    </div>
+</div>

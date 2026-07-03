@@ -1,0 +1,117 @@
+﻿@model IEnumerable<OOPBank.Models.Account>
+
+@{
+    ViewData["Title"] = "Accounts";
+    var customers = ViewBag.Customers as List<OOPBank.Models.Customer>;
+}
+
+<div class="page-header">
+    <div>
+        <h1>Accounts</h1>
+        <p>Create and manage saving/current accounts.</p>
+    </div>
+
+    <button class="primary-btn" type="button" onclick="openModal('accountModal')">
+        <i class="bi bi-wallet2"></i> Create Account
+    </button>
+</div>
+
+<div class="card full-card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Account No</th>
+                <th>Customer</th>
+                <th>Type</th>
+                <th>Balance</th>
+                <th>Interest</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    var interest = item.AccountType == "Savings" ? "5%" : "0%";
+
+                    <tr>
+                        <td>@item.AccountNumber</td>
+                        <td>@item.Customer?.FirstName @item.Customer?.LastName</td>
+                        <td>@item.AccountType</td>
+                        <td>$@item.Balance?.ToString("N2")</td>
+                        <td>@interest</td>
+                        <td><span class="badge active">@item.Status</span></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="empty-row">No accounts found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal-overlay" id="accountModal">
+    <div class="custom-modal">
+        <div class="modal-header-box">
+            <div>
+                <h2>Create New Account</h2>
+                <p>Select customer and create savings/current account.</p>
+            </div>
+
+            <button type="button" class="close-btn" onclick="closeModal('accountModal')">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <form asp-controller="Home" asp-action="AddAccount" method="post">
+            <div class="modal-form-grid">
+                <div>
+                    <label>Customer</label>
+                    <select name="CustomerId" class="form-control" required>
+                        <option value="">Select Customer</option>
+
+                        @if (customers != null)
+                        {
+                            foreach (var customer in customers)
+                            {
+                                <option value="@customer.CustomerId">
+                                    @customer.FirstName @customer.LastName - @customer.Cnic
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div>
+                    <label>Account Number</label>
+                    <input name="AccountNumber" class="form-control" placeholder="Leave empty for auto generate" />
+                </div>
+
+                <div>
+                    <label>Account Type</label>
+                    <select name="AccountType" class="form-control" required>
+                        <option value="">Select Type</option>
+                        <option value="Savings">Savings</option>
+                        <option value="Current">Current</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Opening Balance</label>
+                    <input name="Balance" type="number" step="0.01" class="form-control" value="0" required />
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="cancel-btn" onclick="closeModal('accountModal')">Cancel</button>
+                <button type="submit" class="primary-btn">Create Account</button>
+            </div>
+        </form>
+    </div>
+</div>

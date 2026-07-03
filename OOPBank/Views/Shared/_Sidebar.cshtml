@@ -1,0 +1,69 @@
+﻿@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+<aside class="sidebar">
+    <div class="brand">
+        <div class="brand-icon"><i class="bi bi-bank2"></i></div>
+        <div>
+            <h2>BitBloom Bank</h2>
+            <p>Management System</p>
+        </div>
+    </div>
+
+    <nav class="menu">
+        <a asp-controller="Home" asp-action="Index"
+           class="@(currentAction == "Index" ? "active" : "")">
+            <i class="bi bi-house-fill"></i> Dashboard
+        </a>
+
+        <a asp-controller="Home" asp-action="Customers"
+           class="@(currentAction == "Customers" ? "active" : "")">
+            <i class="bi bi-people"></i> Customers
+        </a>
+
+        <a asp-controller="Home" asp-action="Accounts"
+           class="@(currentAction == "Accounts" ? "active" : "")">
+            <i class="bi bi-briefcase"></i> Accounts
+        </a>
+
+        <a asp-controller="Home" asp-action="Transactions"
+           class="@(currentAction == "Transactions" ? "active" : "")">
+            <i class="bi bi-arrow-repeat"></i> Transactions
+        </a>
+
+        <a asp-controller="Home" asp-action="Transfers"
+           class="@(currentAction == "Transfers" ? "active" : "")">
+            <i class="bi bi-arrow-left-right"></i> Transfers
+        </a>
+
+        <a asp-controller="Home" asp-action="Loans"
+           class="@(currentAction == "Loans" ? "active" : "")">
+            <i class="bi bi-handbag"></i> Loans
+        </a>
+
+        <a asp-controller="Home" asp-action="Cards"
+           class="@(currentAction == "Cards" ? "active" : "")">
+            <i class="bi bi-credit-card"></i> Cards
+        </a>
+
+        <a asp-controller="Home" asp-action="Reports"
+           class="@(currentAction == "Reports" ? "active" : "")">
+            <i class="bi bi-file-earmark-bar-graph"></i> Reports
+        </a>
+
+        <a asp-controller="Home" asp-action="Settings"
+           class="@(currentAction == "Settings" ? "active" : "")">
+            <i class="bi bi-gear"></i> Settings
+        </a>
+    </nav>
+
+
+    <div class="user-box">
+        <div class="avatar">A</div>
+        <div>
+            <h5>Admin User</h5>
+            <p>System Administrator</p>
+        </div>
+    </div>
+</aside>
