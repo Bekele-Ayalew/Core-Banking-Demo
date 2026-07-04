@@ -84,7 +84,7 @@
                         <td>@item.TransactionType</td>
                         <td>@item.Account?.Customer?.FirstName @item.Account?.Customer?.LastName</td>
                         <td>@item.Account?.AccountNumber</td>
-                        <td class="@amountClass">@amountSign$@item.Amount.ToString("N2")</td>
+                        <td class="@amountClass">@amountSign ETB @item.Amount.ToString("N2")</td>
                         <td>@item.TransactionDate?.ToString("MMM dd, yyyy")</td>
                         <td>@item.Description</td>
                     </tr>
